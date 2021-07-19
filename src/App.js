@@ -3,25 +3,19 @@ import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Table, Button, Container, Modal, ModalBody, ModalHeader, FormGroup, ModalFooter, DropdownMenu, DropdownItem, DropdownToggle, Dropdown } from 'reactstrap'
+import {InventarioService} from '../src/services/inventario.service'
 
 
 
-
-
+const inventarioService = new InventarioService()
 class App extends React.Component {
-  fecha = "27/18/2021"
-  inventory = [
-    { codigoMovimiento: "1", codigoAlmacen: "1", tipoMovimiento: "ENTRADA", codigoArticulo: "ART-001", cantidad: 40, fecha: this.fecha },
-    { codigoMovimiento: "2", codigoAlmacen: "2", tipoMovimiento: "SALIDA", codigoArticulo: "ART-002", cantidad: 25, fecha: this.fecha },
-    { codigoMovimiento: "3", codigoAlmacen: "1", tipoMovimiento: "ENTRADA", codigoArticulo: "ART-003", cantidad: 15, fecha: this.fecha },
-    { codigoMovimiento: "4", codigoAlmacen: "2", tipoMovimiento: "SALIDA", codigoArticulo: "ART-004", cantidad: 18, fecha: this.fecha },
 
-    { codigoMovimiento: "5", codigoAlmacen: "1", tipoMovimiento: "SALIDA", codigoArticulo: "ART-001", cantidad: 25, fecha: this.fecha },
-    { codigoMovimiento: "6", codigoAlmacen: "2", tipoMovimiento: "ENTRADA", codigoArticulo: "ART-002", cantidad: 45, fecha: this.fecha },
-    { codigoMovimiento: "7", codigoAlmacen: "1", tipoMovimiento: "SALIDA", codigoArticulo: "ART-003", cantidad: 15, fecha: this.fecha },
-    { codigoMovimiento: "8", codigoAlmacen: "2", tipoMovimiento: "ENTRADA", codigoArticulo: "ART-004", cantidad: 20, fecha: this.fecha }]
+  
+  fecha = "27/18/2021"
+  inventory = this.findAllMovimiento()
+    
   state = {
-    data: this.inventory,
+    data:this.findAllMovimiento(),
     formMovimiento:{
       codigoMovimiento:'',
       codigoAlmacen:'',
@@ -31,6 +25,21 @@ class App extends React.Component {
       fecha:''
     },
     modalMovimiento: false
+  }
+
+
+
+  findAllMovimiento(){
+    let inv = []
+    inventarioService.findAllMovimientos().then( (Response) => {
+      inv = Response.data.data;
+      this.inventory = Response.data.data
+
+      this.setState({data:this.inventory})
+      console.log(this.state)
+      return inv
+    } );
+    return inv
   }
 
   handleChange=e=>{
@@ -63,6 +72,12 @@ class App extends React.Component {
 
   render() {
 
+    /* inventarioService.findAllMovimientos().then( (Response) => {
+      this.inventory = Response.data.data;
+      
+      console.log(Response)
+    } ); */
+
     return (
       <>
         <Container>
@@ -90,6 +105,7 @@ class App extends React.Component {
             </thead>
             <tbody>
               {this.state.data.map(
+                
                 (inventory) =>
                   <tr>
                     <td>{inventory.codigoMovimiento}</td>
@@ -100,6 +116,7 @@ class App extends React.Component {
                     <td>{inventory.fecha}</td>
 
                   </tr>
+                  
 
               ).sort()}
             </tbody>
