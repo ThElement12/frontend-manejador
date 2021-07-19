@@ -33,7 +33,7 @@ class App extends React.Component {
     let inv = []
     inventarioService.findAllMovimientos().then( (Response) => {
       inv = Response.data.data;
-      this.inventory = Response.data.data
+      this.inventory = Response.data
 
       this.setState({data:this.inventory})
       console.log(this.state)
@@ -105,7 +105,6 @@ class App extends React.Component {
             </thead>
             <tbody>
               {this.state.data.map(
-                
                 (inventory) =>
                   <tr>
                     <td>{inventory.codigoMovimiento}</td>
