@@ -1,75 +1,49 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css'
-import { Table, Button, Container, Modal, ModalBody, ModalHeader, FormGroup, ModalFooter, DropdownMenu, DropdownItem, DropdownToggle, Dropdown } from 'reactstrap'
-import {InventarioService} from '../src/services/inventario.service'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Table, Button, Container } from 'reactstrap'
+import { InventarioService } from '../src/services/inventario.service';
 
-
+import ModalMovimiento from './components/ModalMovimiento';
+import ModalAutomatica from  './components/ModalAutomatica';
 
 const inventarioService = new InventarioService()
 class App extends React.Component {
 
-  
-  fecha = "27/18/2021"
   inventory = this.findAllMovimiento()
-    
+
   state = {
-    data:this.findAllMovimiento(),
-    formMovimiento:{
-      codigoMovimiento:'',
-      codigoAlmacen:'',
-      tipoMovimiento:'',
-      codigoArticulo:'',
-      cantidad:'',
-      fecha:''
-    },
-    modalMovimiento: false
+    data: this.findAllMovimiento(),
+    modalMovimiento: false,
+    modalOrden: false
   }
 
-
-
-  findAllMovimiento(){
+  findAllMovimiento() {
     let inv = []
-    inventarioService.findAllMovimientos().then( (Response) => {
+    inventarioService.findAllMovimientos().then((Response) => {
       inv = Response.data.data;
       this.inventory = Response.data
 
-      this.setState({data:this.inventory})
+      this.setState({ data: this.inventory })
       console.log(this.state)
       return inv
-    } );
+    });
     return inv
   }
-
-  handleChange=e=>{
-    this.setState({
-      form:{
-        ...this.state.form,
-        [e.target.name]:e.target.value,
-      }
-    });
+  showModalOrden = () => {
+    this.setState({modalOrden : true})
+  }
+  hideModalOrden = () => {
+    this.setState({modalOrden : false})
   }
 
-  showModalMovimiento=()=> {
-    this.setState({modalMovimiento:true})
+  showModalMovimiento = () => {
+    this.setState({ modalMovimiento: true })
   }
-  hideModalMovimiento=()=> {
-    this.setState({modalMovimiento:false})
+  hideModalMovimiento = () => {
+    //Fetch a la db
+    this.setState({ modalMovimiento: false })
   }
-
-  addMoviment=()=>{
-    console.log("Hola")
-    var newValue={...this.state.form};
-    console.log(newValue)
-    newValue.codigoMovimiento = this.inventory.length+1
-    var lista = this.state.data;
-    lista.push(newValue);
-    console.log(lista);
-    this.setState({data:lista,modalMovimiento:false})
-
-  }
-
   render() {
 
     /* inventarioService.findAllMovimientos().then( (Response) => {
@@ -81,18 +55,17 @@ class App extends React.Component {
     return (
       <>
         <Container>
-          
+
           <br />
           <div>
-              <h3>XYZ  Computers Almacen</h3>
+            <h3>XYZ  Computers Almacen</h3>
           </div>
           <br />
-          <Button onClick={()=>this.showModalMovimiento()} color="primary">Nuevo Movimiento</Button>-
-          <Button color="danger">Nuevo Producto</Button>-
-          <Button color="warning">Generar Orden Automatica</Button>
+          <Button onClick={() => this.showModalMovimiento()} color="primary">Nuevo Movimiento</Button>-
+          <Button onClick={() => this.showModalOrden()} color="warning">Generar Orden Automatica</Button>
           <br />
           <br />
-          <Table  bordered hover>
+          <Table bordered hover>
             <thead>
               <tr>
                 <th>Codigo Movimiento</th>
@@ -113,63 +86,13 @@ class App extends React.Component {
                     <td>{inventory.codigoArticulo}</td>
                     <td>{inventory.cantidad}</td>
                     <td>{inventory.fecha}</td>
-
                   </tr>
-                  
-
               ).sort()}
             </tbody>
           </Table>
         </Container>
-
-        <Modal isOpen={this.state.modalMovimiento}>
-          <ModalHeader>
-            <div>
-              <h3>Nuevo Movimiento</h3>
-            </div>
-          </ModalHeader>
-
-          <ModalBody>
-            <FormGroup>
-              <label>Codigo Movimiento</label>
-              <input className="form-control" readOnly type="text" value={this.inventory.length + 1}  />
-            </FormGroup>
-
-            <FormGroup>
-              <label>Codigo Almacen</label>
-              <input className="form-control" type="text" name="codigoAlmacen" onChange={this.handleChange} />
-            </FormGroup>
-
-            <FormGroup>
-              <label>Tipo de movimiento</label>
-              <input className="form-control" type="text" name="tipoMovimiento" onChange={this.handleChange} />
-            </FormGroup>
-
-            <FormGroup>
-              <label>Codigo Articulo</label>
-              <input className="form-control" type="text" name="codigoArticulo" onChange={this.handleChange}/>
-            </FormGroup>
-
-            <FormGroup>
-              <label>Cantidad</label>
-              <input className="form-control" type="text" name="cantidad" onChange={this.handleChange} />
-            </FormGroup>
-
-            <FormGroup>
-              <label>Fecha</label>
-              <input className="form-control" type="text" name="fecha" onChange={this.handleChange} />
-            </FormGroup>
-
-
-          </ModalBody>
-
-          <ModalFooter>
-            <Button onClick={()=>this.addMoviment()} color="primary">Insertar</Button>
-            <Button onClick={()=>this.hideModalMovimiento()} color="danger">Cancelar</Button>
-          </ModalFooter>
-
-        </Modal>
-
+        <ModalMovimiento modalMovimiento={this.state.modalMovimiento} cantidad={this.inventory.length} hideModalMovimiento={this.hideModalMovimiento}/>
+        <ModalAutomatica modalOrden={this.state.modalOrden} hideModalOrden={this.hideModalOrden}/>
       </>
     );
   }
