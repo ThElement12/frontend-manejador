@@ -10,4 +10,10 @@ export class InventarioService {
     findAllMovimientos(){
         return axios.get(this.url+'movimiento');
     }
+
+    findAllArticles(){
+        return axios.get(this.url+'articulo');
+    }
+
+    
 }

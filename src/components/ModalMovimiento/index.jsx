@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Modal, ModalHeader, ModalBody, Form, ModalFooter, FormGroup, Button } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, Form, ModalFooter, FormGroup, Button,Dropdown, DropdownToggle, DropdownMenu, DropdownItem  } from 'reactstrap';
+
 
 
 export default class ModalMovimiento extends Component {
@@ -7,11 +8,12 @@ export default class ModalMovimiento extends Component {
     form: {
       codigoMovimiento: '',
       codigoAlmacen: '',
-      tipoMovimiento: '',
+      tipoMovimiento: 'ENTRADA',
       codigoArticulo: '',
       cantidad: '',
       fecha: ''
-    }
+    },
+    dropdownOpen: false
   }
   hideModalMovimiento = this.props.hideModalMovimiento;
 
@@ -30,6 +32,21 @@ export default class ModalMovimiento extends Component {
         ...this.state.form,
         [e.target.name]: e.target.value,
       }
+    });
+  }
+
+  handleInputChange = (e) => {
+    const value  = e.currentTarget.textContent;
+    const formN = this.state.form
+    formN.tipoMovimiento = value
+    this.setState({form:formN})
+    
+  };
+
+  toggle = () => {
+    let open = this.state.dropdownOpen ? false : true
+    this.setState({
+      dropdownOpen: open
     });
   }
   render() {
@@ -54,8 +71,20 @@ export default class ModalMovimiento extends Component {
             </FormGroup>
 
             <FormGroup>
-              <label>Tipo de movimiento</label>
-              <input className="form-control" type="text" name="tipoMovimiento" onChange={this.handleChange} required />
+            
+              <br />
+              
+            <Dropdown  group isOpen={this.state.dropdownOpen} toggle={this.toggle} >
+                    <DropdownToggle color="primary" caret>
+                      {this.state.form.tipoMovimiento}
+                    </DropdownToggle>
+                    <DropdownMenu >
+                      
+                    <DropdownItem onClick={e => this.handleInputChange(e)} >ENTRADA</DropdownItem>
+                    <DropdownItem onClick={e => this.handleInputChange(e)} >SALIDA</DropdownItem>
+                    </DropdownMenu>
+  
+                  </Dropdown>
             </FormGroup>
 
             <FormGroup>

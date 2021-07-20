@@ -11,9 +11,12 @@ const inventarioService = new InventarioService()
 class App extends React.Component {
 
   inventory = this.findAllMovimiento()
+  articles = this.findAllArticles()
+  orders = []
 
   state = {
     data: this.findAllMovimiento(),
+    articles: this.findAllArticles(),
     modalMovimiento: false,
     modalOrden: false
   }
@@ -21,15 +24,30 @@ class App extends React.Component {
   findAllMovimiento() {
     let inv = []
     inventarioService.findAllMovimientos().then((Response) => {
-      inv = Response.data.data;
+      inv = Response.data;
       this.inventory = Response.data
 
       this.setState({ data: this.inventory })
-      console.log(this.state)
+
       return inv
     });
     return inv
   }
+
+  findAllArticles(){
+    let inv = []
+    inventarioService.findAllArticles().then(
+      (Response) => {
+        inv = Response.data;
+        this.articles = Response.data
+        this.setState({articles:this.articles})
+        console.log(this.state)
+        return inv
+      }
+    );
+    return inv
+  }
+
   showModalOrden = () => {
     this.setState({modalOrden : true})
   }
@@ -92,7 +110,7 @@ class App extends React.Component {
           </Table>
         </Container>
         <ModalMovimiento modalMovimiento={this.state.modalMovimiento} cantidad={this.inventory.length} hideModalMovimiento={this.hideModalMovimiento}/>
-        <ModalAutomatica modalOrden={this.state.modalOrden} hideModalOrden={this.hideModalOrden}/>
+        <ModalAutomatica articles={this.articles} modalOrden={this.state.modalOrden} cantidad={this.orders.length} hideModalOrden={this.hideModalOrden}/>
       </>
     );
   }
