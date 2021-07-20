@@ -6,7 +6,12 @@ export class InventarioService {
 
     registerMovimiento(movimiento){
         return axios.post(this.url + 'movimiento', movimiento);
-    }    
+    }
+    
+    registerOrden(orden){
+        return axios.post(this.url+'orden',orden)
+    }
+    
     findAllMovimientos(){
         return axios.get(this.url+'movimiento');
     }

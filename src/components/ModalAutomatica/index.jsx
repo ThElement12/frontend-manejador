@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Button, Row, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { InventarioService } from '../../services/inventario.service';
 
 export default class ModalAutomatica extends Component {
   state = {
@@ -37,9 +38,20 @@ export default class ModalAutomatica extends Component {
     //Push a la db
     var newValue = this.state.form;
     newValue.codigoOrdenCompra = this.props.cantidad + 1
-    console.log(this.props.articles)
+    newValue.articulos = this.state.inputList
+    newValue.montoTotal = 0
+    for(var i of newValue.articulos){
+      console.log(Math.round(i.precioOrden * 100) / 100)
+        newValue.montoTotal += Math.round(i.precioOrden * 100) / 100; 
+    }
+    console.log(newValue)
+    const inventarioService = new InventarioService()
+    inventarioService.registerOrden(newValue)
     this.hideModalAutomatica();
+  
   }
+
+
   handleChange = e => {
     this.setState({
       form: {

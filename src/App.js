@@ -103,7 +103,7 @@ class App extends React.Component {
                     <td>{inventory.tipoMovimiento}</td>
                     <td>{inventory.codigoArticulo}</td>
                     <td>{inventory.cantidad}</td>
-                    <td>{inventory.fecha}</td>
+                    <td>{inventory.fecha.slice(0, 10)}</td>
                   </tr>
               ).sort()}
             </tbody>
