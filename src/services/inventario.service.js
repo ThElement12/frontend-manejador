@@ -19,6 +19,9 @@ export class InventarioService {
     findAllArticles(){
         return axios.get(this.url+'articulo');
     }
+    findAllOrders(){
+        return axios.get(this.url+"orden")
+    }
 
     
 }

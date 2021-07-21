@@ -113,7 +113,7 @@ export default class ModalAutomatica extends Component {
     
     for(var ind of this.props.articles){
 
-      if(ind.codigoArticulo == code){
+      if(ind.codigoArticulo === code){
         return ind
       }
 
@@ -123,7 +123,6 @@ export default class ModalAutomatica extends Component {
   }
 
   render() {
-    const inputList = [];
     return (
       <Modal isOpen={this.props.modalOrden}>
         <ModalHeader>
@@ -179,7 +178,7 @@ export default class ModalAutomatica extends Component {
                   </Dropdown>} */}
 
                   { 
-                  <Dropdown  style={ i==0? {marginTop:0}:{marginTop:20} }  group isOpen={ i == this.state.inputList.length-1? this.state.dropdownOpen:false} toggle={this.toggle}>
+                  <Dropdown  style={ i===0? {marginTop:0}:{marginTop:20} }  group isOpen={ i === this.state.inputList.length-1? this.state.dropdownOpen:false} toggle={this.toggle}>
                     <DropdownToggle color="primary" caret>
                       {x.codigoArticulo}
                     </DropdownToggle>
@@ -199,7 +198,7 @@ export default class ModalAutomatica extends Component {
                 </div>
                 <div className="col-4">
   
-                  <input className="form-control" style={ i==0? {marginTop:0}:{marginTop:20} } placeholder="cantidad" type="number"value={x.cantidad} name="cantidad" onChange={e => this.handleCantidad(e, i)} />
+                  <input className="form-control" style={ i===0? {marginTop:0}:{marginTop:20} } placeholder="cantidad" type="number"value={x.cantidad} name="cantidad" onChange={e => this.handleCantidad(e, i)} />
                 </div>
                 <div className="col-2 " >
                 <Row>
@@ -207,7 +206,7 @@ export default class ModalAutomatica extends Component {
                 
                 
                 
-                {this.state.inputList.length !== 1 && <Button style={ i==0? {marginTop:0}:{marginTop:20} } onClick={() => this.handleRemoveClick(i)} color="danger">-</Button> }
+                {this.state.inputList.length !== 1 && <Button style={ i===0? {marginTop:0}:{marginTop:20} } onClick={() => this.handleRemoveClick(i)} color="danger">-</Button> }
                 {this.state.inputList.length - 1 === i && <Button style={ i > 0? {marginTop:20}:{marginTop:0} }  onClick={this.handleAddClick} color="primary">+</Button>  }
                 </Row>
                   
