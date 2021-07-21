@@ -11,7 +11,7 @@ const inventarioService = new InventarioService()
 export default class index extends Component {
     inventory = this.findAllMovimiento()
     articles = this.findAllArticles()
-    orders = []
+    orders = this.findAllOrdenes()
   
     state = {
       data: this.findAllMovimiento(),
@@ -28,6 +28,16 @@ export default class index extends Component {
   
         this.setState({ data: this.inventory })
   
+        return inv
+      });
+      return inv
+    }
+
+    findAllOrdenes() {
+      let inv = []
+      inventarioService.findAllOrders().then((Response) => {
+        inv = Response.data;
+        this.orders = Response.data  
         return inv
       });
       return inv
